@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Alex Turbov <zaufi@pm.me>
+# SPDX-License-Identifier: CC0-1.0
+
+[attr]noqa whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,-tab-in-indent,-indent-with-non-tab
+[attr]doc  conflict-marker-size=79
+
+*          text=auto whitespace=tab-in-indent
+*.md       doc

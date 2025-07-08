@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: 2025 Alex Turbov <zaufi@pm.me>
+# SPDX-License-Identifier: CC0-1.0
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "check-encoding"
+description = "A CLI tool to check file encoding compliance"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file="LICENSES/GPL-3.0-or-later.txt" }
+authors = [{ name="Alex Turbov", email="zaufi@pm.me" }]
+maintainers = [{ name="Alex Turbov", email="zaufi@pm.me" }]
+keywords = ["encoding", "cli", "utf-8", "validation"]
+# https://pypi.org/classifiers
+classifiers = [
+    "Development Status :: 4 - Beta"
+  , "Environment :: Console"
+  , "Intended Audience :: Developers"
+  , "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+  , "Natural Language :: English"
+  , "Operating System :: OS Independent"
+  , "Programming Language :: Python :: 3"
+  , "Programming Language :: Python :: 3 :: Only"
+  , "Programming Language :: Python :: 3.11"
+  , "Programming Language :: Python :: 3.12"
+  , "Topic :: Text Processing :: Linguistic"
+  , "Topic :: Utilities"
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/zaufi/check-encoding"
+Source = "https://github.com/zaufi/check-encoding"
+
+[project.scripts]
+check-encoding = "check_encoding.cli:main"
+
+[tool.hatch.envs.default]
+description = "Development environment"
+dependencies = ["pytest"]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.publish]
+repository = "pypi"

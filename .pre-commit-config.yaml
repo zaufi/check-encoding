@@ -1,0 +1,83 @@
+# SPDX-FileCopyrightText: 2025 Alex Turbov <zaufi@pm.me>
+# SPDX-License-Identifier: CC0-1.0
+#
+# Read the docs here: https://pre-commit.com and http://jorisroovers.github.io/gitlint/
+# Install hooks to your clone:
+#   $ pre-commit install
+#
+# List of available hooks: https://pre-commit.com/hooks.html
+#
+
+default_stages: [pre-commit]
+default_install_hook_types: [commit-msg, pre-commit]
+fail_fast: false
+
+repos:
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+        always_run: true
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      - id: git-check
+        pass_filenames: false
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        name: Commit message check
+        stages: [commit-msg]
+
+    # NOTE For config options check this: https://editorconfig-checker.github.io
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker
+    rev: v3.3.0
+    hooks:
+      - id: editorconfig-checker
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        stages: [commit-msg, pre-commit]
+
+    # NOTE See BUG https://github.com/crate-ci/typos/issues/390
+  - repo: https://github.com/adhtruong/mirrors-typos
+    rev: v1.34.0
+    hooks:
+      - id: typos
+        # NOTE Override hook provided args to prevent automatic
+        # fixing of found typos. Let the dev decide what to fix!
+        args: [--force-exclude]
+        stages: [commit-msg, pre-commit]
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    # ALERT Don't forget to update `pyproject.toml:tool.hatch.envs.default`
+    rev: v0.23
+    hooks:
+      - id: validate-pyproject
+
+  - repo: https://github.com/fsfe/reuse-tool
+    # ALERT Don't forget to update `pyproject.toml:tool.hatch.envs.default`
+    rev: v5.0.2
+    hooks:
+      - id: reuse

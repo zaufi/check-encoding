@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: OnixS Development Team <dev@onixs.biz>
+# SPDX-License-Identifier: CC0-1.0
+
+# In-source ignore comments:
+# - one line (or word): `codespell:ignore [word]`
+# - a block:
+#   codespell:ignore-begin
+#   ...
+#   codespell:ignore-end
+
+[codespell]
+builtin = clear,rare,names,code,en-GB_to_en-US
+check-filenames =
+context = 2
+enable-colors = true
+quiet-level = 3
+# TODO Add _false positives_ to the ignore list below.
+# ignore-words-list =
+skip = build,.venv
+
+# kate: hl ini;
