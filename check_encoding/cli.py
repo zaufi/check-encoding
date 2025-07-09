@@ -113,12 +113,12 @@ def main():
         print(f"❌ Unknown encoding: {args.encoding}", file=sys.stderr)
         sys.exit(1)
 
-    all_ok = reduce(
+    found_error = reduce(
         lambda acc, file: acc
-        and check_file_encoding(file, args.encoding, args.max_errors),
+        or not check_file_encoding(file, args.encoding, args.max_errors),
         iter_existing_files(args.files),
-        True,
+        False,
     )
-    all_ok = all_ok and not iter_existing_files.missing
+    found_error = found_error or iter_existing_files.missing
 
-    sys.exit(0 if all_ok else 1)
+    sys.exit(int(found_error))
