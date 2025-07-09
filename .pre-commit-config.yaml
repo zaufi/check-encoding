@@ -43,6 +43,12 @@ repos:
         name: Commit message check
         stages: [commit-msg]
 
+  - repo: https://github.com/zaufi/check-encoding
+    rev: b55ecee
+    hooks:
+      - id: check-encoding
+        args: [--encoding, utf-8]
+
     # NOTE For config options check this: https://editorconfig-checker.github.io
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
     rev: v3.3.0
