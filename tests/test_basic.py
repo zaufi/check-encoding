@@ -3,6 +3,7 @@
 
 from check_encoding import cli
 
+
 def test_cli_runs(monkeypatch):
     monkeypatch.setattr("sys.argv", ["check-encoding", "--list-encodings"])
     try:
