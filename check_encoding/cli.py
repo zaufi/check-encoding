@@ -27,11 +27,11 @@ def list_encodings():
         lambda m, ai: m | {ai[1]: m.get(ai[1], []) + [ai[0]]}, aliases.items(), {}
     )
     canonical_to_aliases = {
-        canonical: [alias for alias in sorted(set(alist))]
+        canonical: list(dict.fromkeys(alist))
         for canonical, alist in canonical_to_aliases.items()
     }
 
-    for canonical, alias_list in sorted(canonical_to_aliases.items()):
+    for canonical, alias_list in canonical_to_aliases.items():
         print(f"{canonical.ljust(15)} (aliases: {', '.join(alias_list)})")
 
 
