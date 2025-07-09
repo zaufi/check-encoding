@@ -24,12 +24,17 @@ def iter_existing_files(paths):
 
 def list_encodings():
     """Print all known encodings and their aliases in aligned columns"""
-    canonical_to_aliases = defaultdict(list)
-    for alias, canonical in aliases.items():
-        canonical_to_aliases[canonical].append(alias)
+    canonical_to_aliases = reduce(
+        lambda m, ai: m | {ai[1]: m.get(ai[1], []) + [ai[0]]},
+        aliases.items(),
+        {}
+    )
+    canonical_to_aliases = {
+        canonical: [alias for alias in sorted(set(alist))]
+        for canonical, alist in canonical_to_aliases.items()
+    }
 
-    for canonical in sorted(canonical_to_aliases.keys()):
-        alias_list = sorted(set(canonical_to_aliases[canonical]))
+    for canonical, alias_list in sorted(canonical_to_aliases.items()):
         print(f"{canonical.ljust(15)} (aliases: {', '.join(alias_list)})")
 
 
