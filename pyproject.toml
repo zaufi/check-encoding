@@ -40,11 +40,12 @@ check-encoding = "check_encoding.cli:main"
 
 [tool.hatch.envs.default]
 description = "Development environment"
-dependencies = ["pytest"]
+dependencies = ["pytest", "ruff"]
 installer = "uv"
 
 [tool.hatch.envs.default.scripts]
 test = "pytest"
+lint = "ruff check ."
 
 [tool.hatch.version]
 source = "vcs"

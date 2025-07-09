@@ -6,7 +6,6 @@ import argparse
 import sys
 import os
 import codecs
-import shutil
 from collections import defaultdict
 from encodings.aliases import aliases
 from functools import reduce
@@ -22,6 +21,7 @@ def iter_existing_files(paths):
             iter_existing_files.missing = True
             print(f"❌ {path}: File not found", file=sys.stderr)
 
+
 def list_encodings():
     """Print all known encodings and their aliases in aligned columns"""
     canonical_to_aliases = defaultdict(list)
@@ -32,16 +32,17 @@ def list_encodings():
         alias_list = sorted(set(canonical_to_aliases[canonical]))
         print(f"{canonical.ljust(15)} (aliases: {', '.join(alias_list)})")
 
+
 def check_file_encoding(filepath, encoding, max_errors=10):
     try:
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             data = f.read()
     except Exception as e:
         print(f"❌ {filepath}: Could not read file: {e}", file=sys.stderr)
         return False
 
     try:
-        decoder = codecs.getincrementaldecoder(encoding)(errors='strict')
+        decoder = codecs.getincrementaldecoder(encoding)(errors="strict")
     except LookupError:
         print(f"❌ Unknown encoding: {encoding}", file=sys.stderr)
         return False
@@ -52,7 +53,7 @@ def check_file_encoding(filepath, encoding, max_errors=10):
     errors = 0
 
     while i < len(data):
-        byte = data[i:i+1]
+        byte = data[i : i + 1]
         try:
             decoded = decoder.decode(byte, final=False)
             if decoded == "\n":
@@ -63,7 +64,10 @@ def check_file_encoding(filepath, encoding, max_errors=10):
             i += 1
         except UnicodeDecodeError:
             hexval = f"0x{data[i]:02X}"
-            print(f"❌ {filepath}:{line}:{column} Invalid character {hexval}", file=sys.stderr)
+            print(
+                f"❌ {filepath}:{line}:{column} Invalid character {hexval}",
+                file=sys.stderr,
+            )
             errors += 1
             if errors >= max_errors:
                 break
@@ -72,12 +76,26 @@ def check_file_encoding(filepath, encoding, max_errors=10):
 
     return errors == 0
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Check if files are in a specific encoding (default: UTF-8).")
-    parser.add_argument('files', nargs='*', help='Files to check')
-    parser.add_argument('--encoding', default='utf-8', help='Encoding to check against (default: utf-8)')
-    parser.add_argument('--max-errors', type=int, default=10, help='Maximum number of errors to report per file (default: 10)')
-    parser.add_argument('--list-encodings', action='store_true', help='List all supported encoding names')
+    parser = argparse.ArgumentParser(
+        description="Check if files are in a specific encoding (default: UTF-8)."
+    )
+    parser.add_argument("files", nargs="*", help="Files to check")
+    parser.add_argument(
+        "--encoding", default="utf-8", help="Encoding to check against (default: utf-8)"
+    )
+    parser.add_argument(
+        "--max-errors",
+        type=int,
+        default=10,
+        help="Maximum number of errors to report per file (default: 10)",
+    )
+    parser.add_argument(
+        "--list-encodings",
+        action="store_true",
+        help="List all supported encoding names",
+    )
 
     args = parser.parse_args()
 
@@ -96,7 +114,8 @@ def main():
         sys.exit(1)
 
     all_ok = reduce(
-        lambda acc, file: acc and check_file_encoding(file, args.encoding, args.max_errors),
+        lambda acc, file: acc
+        and check_file_encoding(file, args.encoding, args.max_errors),
         iter_existing_files(args.files),
         True,
     )
