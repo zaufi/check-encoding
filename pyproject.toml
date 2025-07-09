@@ -38,7 +38,6 @@ Source = "https://github.com/zaufi/check-encoding"
 [project.scripts]
 check-encoding = "check_encoding.cli:main"
 
-
 [tool.hatch.envs.default]
 description = "Development environment"
 dependencies = ["pytest", "ruff"]
