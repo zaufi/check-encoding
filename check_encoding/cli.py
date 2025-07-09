@@ -3,11 +3,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
-import sys
 import os
+import sys
 import codecs
 from encodings.aliases import aliases
 from functools import reduce
+
+
+def die(message: str) -> None:
+    """Print an error message prefixed with a red cross."""
+    print(f"❌ {message}", file=sys.stderr)
 
 
 def iter_existing_files(paths):
@@ -18,7 +23,7 @@ def iter_existing_files(paths):
             yield path
         else:
             iter_existing_files.missing = True
-            print(f"❌ {path}: File not found", file=sys.stderr)
+            die(f"{path}: File not found")
 
 
 def list_encodings():
@@ -40,7 +45,7 @@ def check_file_encoding(filepath, decoder, max_errors=10):
         with open(filepath, "rb") as f:
             data = f.read()
     except Exception as e:
-        print(f"❌ {filepath}: Could not read file: {e}", file=sys.stderr)
+        die(f"{filepath}: Could not read file: {e}")
         return False
 
     line = 1
@@ -61,10 +66,7 @@ def check_file_encoding(filepath, decoder, max_errors=10):
             i += 1
         except UnicodeDecodeError:
             hexval = f"0x{data[i]:02X}"
-            print(
-                f"❌ {filepath}:{line}:{column} Invalid character {hexval}",
-                file=sys.stderr,
-            )
+            die(f"{filepath}:{line}:{column} Invalid character {hexval}")
             errors += 1
             if errors >= max_errors:
                 break
@@ -108,7 +110,7 @@ def main():
         decoder_cls = codecs.getincrementaldecoder(args.encoding)
         decoder = decoder_cls(errors="strict")
     except LookupError:
-        print(f"❌ Unknown encoding: {args.encoding}", file=sys.stderr)
+        die(f"Unknown encoding: {args.encoding}")
         sys.exit(1)
 
     found_error = reduce(
