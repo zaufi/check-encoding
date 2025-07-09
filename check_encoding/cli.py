@@ -33,7 +33,8 @@ def list_encodings():
         print(f"{canonical.ljust(15)} (aliases: {', '.join(alias_list)})")
 
 
-def check_file_encoding(filepath, encoding, max_errors=10):
+def check_file_encoding(filepath, decoder, max_errors=10):
+    decoder.reset()
     try:
         with open(filepath, "rb") as f:
             data = f.read()
@@ -41,11 +42,6 @@ def check_file_encoding(filepath, encoding, max_errors=10):
         print(f"❌ {filepath}: Could not read file: {e}", file=sys.stderr)
         return False
 
-    try:
-        decoder = codecs.getincrementaldecoder(encoding)(errors="strict")
-    except LookupError:
-        print(f"❌ Unknown encoding: {encoding}", file=sys.stderr)
-        return False
 
     line = 1
     column = 1
@@ -108,14 +104,15 @@ def main():
         sys.exit(1)
 
     try:
-        codecs.lookup(args.encoding)
+        decoder_cls = codecs.getincrementaldecoder(args.encoding)
     except LookupError:
         print(f"❌ Unknown encoding: {args.encoding}", file=sys.stderr)
         sys.exit(1)
 
+    decoder = decoder_cls(errors="strict")
     found_error = reduce(
         lambda acc, file: acc
-        or not check_file_encoding(file, args.encoding, args.max_errors),
+        or not check_file_encoding(file, decoder, args.max_errors),
         iter_existing_files(args.files),
         False,
     )
