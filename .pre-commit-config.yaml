@@ -44,7 +44,7 @@ repos:
         stages: [commit-msg]
 
   - repo: https://github.com/zaufi/check-encoding
-    rev: b55ecee
+    rev: '7759888'
     hooks:
       - id: check-encoding
         args: [--encoding, utf-8]
