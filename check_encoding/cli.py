@@ -6,7 +6,6 @@ import argparse
 import sys
 import os
 import codecs
-from collections import defaultdict
 from encodings.aliases import aliases
 from functools import reduce
 
