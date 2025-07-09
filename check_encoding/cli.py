@@ -24,9 +24,7 @@ def iter_existing_files(paths):
 def list_encodings():
     """Print all known encodings and their aliases in aligned columns"""
     canonical_to_aliases = reduce(
-        lambda m, ai: m | {ai[1]: m.get(ai[1], []) + [ai[0]]},
-        aliases.items(),
-        {}
+        lambda m, ai: m | {ai[1]: m.get(ai[1], []) + [ai[0]]}, aliases.items(), {}
     )
     canonical_to_aliases = {
         canonical: [alias for alias in sorted(set(alist))]
