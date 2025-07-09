@@ -112,8 +112,8 @@ def main():
         sys.exit(1)
 
     found_error = reduce(
-        lambda acc, file: acc
-        or not check_file_encoding(file, decoder, args.max_errors),
+        lambda acc, file: not check_file_encoding(file, decoder, args.max_errors)
+        or acc,
         iter_existing_files(args.files),
         False,
     )
